@@ -29,6 +29,8 @@ Resulting resource map is:
  ```
  
 ### Duplicate classes between plugin jars:
+This example uses the `plugins-with-duplicates` directory which includes multiple versions of apache commons-io.
+
 ```
 % java -jar target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar --plugins plugins-with-duplicates
 Processing .jar file:  target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar
