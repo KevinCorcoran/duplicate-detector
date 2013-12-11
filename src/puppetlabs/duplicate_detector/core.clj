@@ -11,7 +11,7 @@
   [resource]
   (let []
     (and
-      ;; Fliter out clojure library; it's big
+      ;; Fliter out clojure stdlib - it's really big
       (not (.startsWith resource "clojure/"))
 
       ;; we only care about .class and .clj files
@@ -49,6 +49,7 @@
   ;;    java -jar <jar-name.jar> -classpath <plugins_directory>
   (let [classpath (System/getProperty "java.class.path")
         jar-filenames (split classpath #":")]
+    (println "CLasspath is " classpath)
     ;(println "got these .jars: " jar-filenames)
     (doseq [f jar-filenames] (process-jar! f))
     (println "Resulting resource map is: ")
