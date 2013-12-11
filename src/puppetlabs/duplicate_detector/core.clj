@@ -4,6 +4,7 @@
   (:require [clojure.tools.nrepl.server :refer [start-server stop-server]]
             [clojure.string :refer [split]]
             [clojure.java.io :refer [file]]
+            [clojure.tools.cli :refer [cli]]
             [clojure.pprint :refer [pprint]]))
 
 (def resources (atom {}))
@@ -48,14 +49,20 @@
   ;(println "Starting nREPL server on port 7888...")
   ;(defonce server (start-server :port 7888))
 
+  ;(println "args = " args)
+
   (let [
          ;; For whatever reason, this system property only returns the uberjar
          ;; and nont the entire classpath.
          uberjar (System/getProperty "java.class.path")
 
-         plugins-dir (file (second args))
-         plugin-jars (filter #(.endsWith % ".jar") (conj [] (file-seq plugins-dir)))]
+         cli-data (first (cli args ["-p" "--plugins" "plugins directory"]))
+         plugins-dir (cli-data :plugins)
+         plugin-jars (if plugins-dir
+                       (filter #(.endsWith (.getPath %) ".jar") (file-seq (file plugins-dir)))
+                       [])]
     (process-jar! uberjar)
+    (println plugin-jars)
     (doseq [f plugin-jars] (process-jar! f))
-    (println "Resulting re source map is: ")
+    (println "Resulting resource map is: ")
     (pprint @resources)))
