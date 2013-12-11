@@ -49,8 +49,6 @@
   ;(println "Starting nREPL server on port 7888...")
   ;(defonce server (start-server :port 7888))
 
-  ;(println "args = " args)
-
   (let [
          ;; For whatever reason, this system property only returns the uberjar
          ;; and nont the entire classpath.
@@ -62,7 +60,6 @@
                        (filter #(.endsWith (.getPath %) ".jar") (file-seq (file plugins-dir)))
                        [])]
     (process-jar! uberjar)
-    (println plugin-jars)
     (doseq [f plugin-jars] (process-jar! f))
     (println "Resulting resource map is: ")
     (pprint @resources)))
