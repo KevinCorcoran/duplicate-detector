@@ -57,9 +57,15 @@
          cli-data (first (cli args ["-p" "--plugins" "plugins directory"]))
          plugins-dir (cli-data :plugins)
          plugin-jars (if plugins-dir
-                       (filter #(.endsWith (.getPath %) ".jar") (file-seq (file plugins-dir)))
+                       (filter #(.endsWith % ".jar") (map #(.getPath %) (file-seq (file plugins-dir))))
                        [])]
-    (process-jar! uberjar)
-    (doseq [f plugin-jars] (process-jar! f))
+    (try
+      (do
+        (process-jar! uberjar)
+        (doseq [f plugin-jars] (process-jar! f)))
+      (catch Exception e
+        (do
+          (println (str "ERROR: " (.getMessage e)))
+          (System/exit 1))))
     (println "Resulting resource map is: ")
     (pprint @resources)))
