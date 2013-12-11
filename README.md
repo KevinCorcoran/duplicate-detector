@@ -34,11 +34,7 @@ This example uses the `plugins-with-duplicates` directory which includes multipl
 ```
 % java -jar target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar --plugins plugins-with-duplicates
 Processing .jar file:  target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar
-Processing .jar file:  #<File plugins-with-duplicates/commons-io-2.1.jar>
-Processing .jar file:  #<File plugins-with-duplicates/commons-io-2.4.jar>
-Exception in thread "main" java.lang.Exception: Class or namespace org/apache/commons/io/ByteOrderMark.class found in both plugins-with-duplicates/commons-io-2.4.jar and plugins-with-duplicates/commons-io-2.1.jar
-	at puppetlabs.duplicate_detector.core$process_jar_BANG_.invoke(core.clj:39)
-	at puppetlabs.duplicate_detector.core$_main.doInvoke(core.clj:63)
-	at clojure.lang.RestFn.applyTo(RestFn.java:137)
-	at puppetlabs.duplicate_detector.core.main(Unknown Source)
+Processing .jar file:  plugins-with-duplicates/commons-io-2.1.jar
+Processing .jar file:  plugins-with-duplicates/commons-io-2.4.jar
+ERROR: Class or namespace org/apache/commons/io/ByteOrderMark.class found in both plugins-with-duplicates/commons-io-2.4.jar and plugins-with-duplicates/commons-io-2.1.jar
 ```
