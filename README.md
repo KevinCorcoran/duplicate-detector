@@ -21,3 +21,13 @@ Processing .jar file:  plugins-with-duplicates/commons-io-2.1.jar
 Processing .jar file:  plugins-with-duplicates/commons-io-2.4.jar
 ERROR: Class or namespace org/apache/commons/io/ByteOrderMark.class found in both plugins-with-duplicates/commons-io-2.4.jar and plugins-with-duplicates/commons-io-2.1.jar
 ```
+## Benchmarks
+### Plugins dir includes commons-io and clj-http
+```
+% java -jar target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar --plugins plugins-timing
+Processing .jar file:  target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar
+Processing .jar file:  plugins-timing/clj-http-0.5.3.jar
+Processing .jar file:  plugins-timing/commons-io-2.4.jar
+"Elapsed time: 117.502 msecs"
+Processed 128 resources from 3 .jars
+```
