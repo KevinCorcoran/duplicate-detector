@@ -39,6 +39,20 @@
                      (str "Class or namespace " resource " found in both " filename " and " (@resources resource))))
             (swap! resources assoc resource filename)))))))
 
+(defn process-jars!
+  [uberjar plugins-dir]
+  (let [plugin-jars (if plugins-dir
+                      (filter #(.endsWith % ".jar") (map #(.getPath %) (file-seq (file plugins-dir))))
+                      [])]
+    (try
+      (do
+        (process-jar! uberjar)
+        (doseq [f plugin-jars] (process-jar! f)))
+      (catch Exception e
+        (do
+          (println (str "ERROR: " (.getMessage e)))
+          (System/exit 1))))))
+
 ;; We expect we are being run as an uberjar
 ;; Like this:
 ;;    java -jar <jar-name.jar> --plugins <plugins_directory>
@@ -56,16 +70,8 @@
 
          cli-data (first (cli args ["-p" "--plugins" "plugins directory"]))
          plugins-dir (cli-data :plugins)
-         plugin-jars (if plugins-dir
-                       (filter #(.endsWith % ".jar") (map #(.getPath %) (file-seq (file plugins-dir))))
-                       [])]
-    (try
-      (do
-        (process-jar! uberjar)
-        (doseq [f plugin-jars] (process-jar! f)))
-      (catch Exception e
-        (do
-          (println (str "ERROR: " (.getMessage e)))
-          (System/exit 1))))
-    (println "Resulting resource map is: ")
-    (pprint @resources)))
+         time (time (process-jars! uberjar plugins-dir))]
+    (println "Processed" (count @resources) "resources from" (count (distinct (vals @resources))) ".jars")
+    ;(println "Resulting resource map is: ")
+    ;(pprint @resources)
+    ))

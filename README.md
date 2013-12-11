@@ -7,25 +7,8 @@ This thing looks at the .jars on the classpath and identifies classes and clojur
 ```
 % java -jar target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar
 Processing .jar file:  target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar
-Resulting resource map is:
-{"puppetlabs/duplicate_detector/core.clj"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar",
- "puppetlabs/duplicate_detector/core__init.class"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar",
- "puppetlabs/duplicate_detector/core.class"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar",
- "puppetlabs/duplicate_detector/core$should_process_QMARK_.class"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar",
- "puppetlabs/duplicate_detector/core$process_jar_BANG_.class"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar",
- "puppetlabs/duplicate_detector/core$loading__4910__auto__.class"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar",
- "puppetlabs/duplicate_detector/core$fn__794.class"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar",
- "puppetlabs/duplicate_detector/core$_main.class"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar",
- "puppetlabs/duplicate_detector/core$_main$fn__803.class"
- "target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar"}
+"Elapsed time: 107.593 msecs"
+Processed 11 resources from 1 .jars
  ```
  
 ### Duplicate classes between plugin jars:
