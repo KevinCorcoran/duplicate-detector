@@ -31,7 +31,7 @@ Processing .jar file:  plugins-timing/commons-io-2.4.jar
 "Elapsed time: 117.502 msecs"
 Processed 128 resources from 3 .jars
 ```
-### Plugins dir includes a hanful of .jars
+### Plugins dir includes a handful of .jars
 ```
 % java -jar target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar --plugins plugins-timing-heavy
 Processing .jar file:  target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar
