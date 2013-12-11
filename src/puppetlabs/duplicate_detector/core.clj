@@ -3,6 +3,7 @@
   (:import (java.util.jar JarFile))
   (:require [clojure.tools.nrepl.server :refer [start-server stop-server]]
             [clojure.string :refer [split]]
+            [clojure.java.io :refer [file]]
             [clojure.pprint :refer [pprint]]))
 
 (def resources (atom {}))
@@ -37,6 +38,9 @@
                      (str "Class or namespace " resource " found in both " filename " and " (@resources resource))))
             (swap! resources assoc resource filename)))))))
 
+;; We expect we are being run as an uberjar
+;; Like this:
+;;    java -jar <jar-name.jar> --plugins <plugins_directory>
 (defn -main
   [& args]
 
@@ -44,13 +48,14 @@
   ;(println "Starting nREPL server on port 7888...")
   ;(defonce server (start-server :port 7888))
 
-  ;; We expect we are being run as an uberjar
-  ;; Like this:
-  ;;    java -jar <jar-name.jar> -classpath <plugins_directory>
-  (let [classpath (System/getProperty "java.class.path")
-        jar-filenames (split classpath #":")]
-    (println "CLasspath is " classpath)
-    ;(println "got these .jars: " jar-filenames)
-    (doseq [f jar-filenames] (process-jar! f))
-    (println "Resulting resource map is: ")
+  (let [
+         ;; For whatever reason, this system property only returns the uberjar
+         ;; and nont the entire classpath.
+         uberjar (System/getProperty "java.class.path")
+
+         plugins-dir (file (second args))
+         plugin-jars (filter #(.endsWith % ".jar") (conj [] (file-seq plugins-dir)))]
+    (process-jar! uberjar)
+    (doseq [f plugin-jars] (process-jar! f))
+    (println "Resulting re source map is: ")
     (pprint @resources)))
