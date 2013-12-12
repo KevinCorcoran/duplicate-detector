@@ -49,6 +49,8 @@ Processing .jar file:  plugins-timing-heavy/postgresql-9.1-901-1.jdbc4.jar
 Processed 889 resources from 11 .jars
 ```
 ### Don't exclude the clojure sources
+Interesting performance note: this example processed almost 5x as many resources as the previous example, but only took 18% longer.
+
 ```
 % java -jar target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar --plugins plugins-timing-heavy --include-clojure-sources
 Processing .jar file:  target/duplicate-detector-0.1.0-SNAPSHOT-standalone.jar
