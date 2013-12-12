@@ -70,9 +70,10 @@
 
          cli-data (first (cli args
                               ["-p" "--plugins" "plugins directory"]
-                              ["-c" "--[no-]include-clojure-sources" :default :false]))
+                              ["-c" "--[no-]include-clojure-sources" :default false]))
          plugins-dir (cli-data :plugins)
          include-clojure-sources (cli-data :include-clojure-sources)
+         _ (println "Including clojure sources?" include-clojure-sources)
          time (time (process-jars! uberjar plugins-dir include-clojure-sources))]
     (println "Processed" (count @resources) "resources from" (count (distinct (vals @resources))) ".jars")
     ;(println "Resulting resource map is: ")
