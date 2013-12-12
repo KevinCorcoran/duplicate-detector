@@ -10,11 +10,11 @@
 (def resources (atom {}))
 
 (defn should-process?
-  [resource]
+  [resource include-clojure-sources]
   (let []
     (and
       ;; Fliter out clojure stdlib - it's really big
-      (not (.startsWith resource "clojure/"))
+      (or include-clojure-sources (not (.startsWith resource "clojure/")))
 
       ;; we only care about .class and .clj files
       (or (.endsWith resource ".class") (.endsWith resource ".clj"))
@@ -26,13 +26,13 @@
       (not (= resource "project.clj")))))
 
 (defn process-jar!
-  [filename]
+  [filename include-clojure-sources]
   (println "Processing .jar file: " filename)
   (let [jar (JarFile. filename)
         entries (.entries jar)]
     (while (.hasMoreElements entries)
       (let [resource (.getName (.nextElement entries))]
-        (when (should-process? resource)
+        (when (should-process? resource include-clojure-sources)
           ;(println "Found .jar entry: " resource)
           (if (contains? @resources resource)
             (throw (Exception.
@@ -40,14 +40,14 @@
             (swap! resources assoc resource filename)))))))
 
 (defn process-jars!
-  [uberjar plugins-dir]
+  [uberjar plugins-dir include-clojure-sources]
   (let [plugin-jars (if plugins-dir
                       (filter #(.endsWith % ".jar") (map #(.getPath %) (file-seq (file plugins-dir))))
                       [])]
     (try
       (do
-        (process-jar! uberjar)
-        (doseq [f plugin-jars] (process-jar! f)))
+        (process-jar! uberjar include-clojure-sources)
+        (doseq [f plugin-jars] (process-jar! f include-clojure-sources)))
       (catch Exception e
         (do
           (println (str "ERROR: " (.getMessage e)))
@@ -68,9 +68,12 @@
          ;; and nont the entire classpath.
          uberjar (System/getProperty "java.class.path")
 
-         cli-data (first (cli args ["-p" "--plugins" "plugins directory"]))
+         cli-data (first (cli args
+                              ["-p" "--plugins" "plugins directory"]
+                              ["-c" "--[no-]include-clojure-sources" :default :false]))
          plugins-dir (cli-data :plugins)
-         time (time (process-jars! uberjar plugins-dir))]
+         include-clojure-sources (cli-data :include-clojure-sources)
+         time (time (process-jars! uberjar plugins-dir include-clojure-sources))]
     (println "Processed" (count @resources) "resources from" (count (distinct (vals @resources))) ".jars")
     ;(println "Resulting resource map is: ")
     ;(pprint @resources)
